@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Advent DALLE3 (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Advent DALLE3 (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
