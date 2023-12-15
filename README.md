@@ -16,7 +16,7 @@ Santa called in Cradle, his Chief ML Engineer Elf, and asked if it was possible.
 
 ### Creating the Win UI3 Project
 
-To get started lets open up a Visual Studio and create a new Win UI 3 Project.
+To get started lets open up Visual Studio and create a new Win UI 3 Project.
 
 ![Create new project](images/1.png)
 
@@ -32,7 +32,7 @@ We are going to create a UI that looks like this:
 
 Since the focus of this tutorial is using Open AI models in C# we are going to skip over the details of how the XAML works but if you are familiar with any other XAML UI development this should feel familiar and comfortable.
 
-1. Find the MainWindow.XAML file.  You will find a section that goes from <StackPanel> to </StackPanel>.  Remove this and replace it with the following code:
+1. Find the MainWindow.XAML file.  You will find a section that goes from `<StackPanel>` to `</StackPanel>'.  Remove this and replace it with the following code:
 
 ```
     <Grid>
@@ -69,7 +69,7 @@ Since the focus of this tutorial is using Open AI models in C# we are going to s
     </Grid>
 ```
 
-2. Now open MainWindow.xaml.cs, remove the myButton_Click method and replace it with
+2. Now open MainWindow.xaml.cs, remove the myButton_Click method and replace it with:
 
 ```
         private async void Save_Click(object sender, RoutedEventArgs e)
@@ -80,7 +80,7 @@ Since the focus of this tutorial is using Open AI models in C# we are going to s
         {
         }
 
-                private void ShowPrompt(string prompt)
+        private void ShowPrompt(string prompt)
         {
             GeneratedPrompt.Text = prompt;
             GeneratedPrompt.Visibility = Visibility.Visible;
@@ -119,15 +119,15 @@ Since the focus of this tutorial is using Open AI models in C# we are going to s
 [https://github.com/CameronVetter/Dalle3-CSharp-Advent-Day-17/blob/main/Assets/background.jpg](https://raw.github.com/CameronVetter/Dalle3-CSharp-Advent-Day-17/main/Assets/background.jpg)
 
 4. Place a copy of this file in the Assets folder of your project.
-5. Run the project, you should now have a complete that does nothing.
+5. Run the project, you should now have a complete UI that looks like the above image, but does nothing.
 
 ### Finding your Open AI API Key
 
-You will need the API key of your personal Open AI account.  
+You will need the API key of your personal Open AI account to continue.  
 
-1. Got to the [Open AI developer Portal](https://platform.openai.com/)
+1. Go to the [Open AI developer Portal](https://platform.openai.com/)
 2. Either Login or Sign Up for a new account.
-3. Find your API key, click the API Keys menu item on the left.
+3. Click the API Keys menu item on the left.
 4. Click Create new secret key
 5. Give it any name such as "adventcsharp"
 6. Click Create secret key
@@ -141,7 +141,7 @@ You will need the API key of your personal Open AI account.
 
 Instead of carefully creating a prompt to generate an image we will have GPT-4 do it for us.  
 
-1. Add the nuget package *Azure.AI.OpenAI* to your project.  You must check "Include prerelease" to find this package.
+1. Add the nuget package *Azure.AI.OpenAI* to your project.  You must check "Include prerelease" to find this package. This works package works for both Open AI and Azure Open AI.  I recommend Azure Open AI for enterprise and commerical projects, and either one for personal or fun projects.
 
 ![Add Nuget Package](images/4.png)
 
@@ -153,10 +153,10 @@ Instead of carefully creating a prompt to generate an image we will have GPT-4 d
 
        }
 ```
-3.   Add the following line to instantiate a new client:
+3. Inside this method add the following line to instantiate a new openai client:
 
 ```
-    OpenAIClient client = new(OPENAI_KEY);
+            OpenAIClient client = new(OPENAI_KEY);
 ```
 4.  Use the client to generate a completion.  Add the following code:
 
@@ -175,7 +175,10 @@ Instead of carefully creating a prompt to generate an image we will have GPT-4 d
                    },
                });
 ```
-This tells the client that we want to get a chat completion asyncronously.  We want it to generate only 1 completion.  We want it to be very creative so we give it a temperature of 1.0.  We also want it to be fairly verbose and description so we set MaxTokens to 256.  We specify that we want gpt-4.  Next we create a prompt, feel free to experiment with this prompt later but start with this prompt which will get great results.  Notice that we place the prompt into a System Message, and what the user enters for inspiration is the UserMessage.
+
+This makes a requiest using client to get a chat completion asyncronously.  We want it to generate only 1 completion.  We want it to be very creative so we give it a temperature of 1.0.  We also want it to be fairly verbose and descriptive so we set MaxTokens to 256.  Finally, We specify that we want gpt-4.  
+
+In the messages we create a prompt, feel free to experiment with this prompt later but start with this prompt which will get great results.  Notice that we place the prompt into a System Message, and what the user enters for inspiration is the UserMessage.
 
 
 5. Finally return the result of the completion.  The final method should look like this:
@@ -224,7 +227,7 @@ This tells the client that we want to get a chat completion asyncronously.  We w
 
 ### Generating the Picture with DALL-E 3
 
-Now that we have really good prompts for image generation being created, lets generate the image!
+Now that we have really good prompts for image generation being created, lets use them to generate the image!
 
 1. Create a new method called Generate Image:
 
@@ -237,9 +240,9 @@ Now that we have really good prompts for image generation being created, lets ge
 2. Add the following line to instantiate a new client:
 
 ```
-    OpenAIClient client = new(OPENAI_KEY);
+            OpenAIClient client = new(OPENAI_KEY);
 ```
-3. Use the client to generate a completion.  Add the following code:
+1. Use the client to generate an image.  Add the following code:
 
 
 ```
@@ -252,9 +255,9 @@ Now that we have really good prompts for image generation being created, lets ge
                     DeploymentName = "dall-e-3"
                 });
 ```
-This tells the client that we want it to generate an image asyncronously.  We want it to generate only 1 image.  We want it to be very high resolution so we specify the largest size allowed. We specify that we want dall-e-3.  Finally we pass it the prompt, this will the prompt generated by GPT-4! Yes that's right, an AI is using an AI model!
+This tells the client that we want it to generate an image asyncronously.  We want it to generate only 1 image.  We want it to be very high resolution so we specify the largest size allowed. We specify that we want dall-e-3.  Finally we pass it the prompt, this is the prompt generated by GPT-4! Yes that's right, an AI is using an AI model!
 
-4. Finally return the result of the completion.  The final method should look like this:
+4. Finally return the result of the generation.  The final method should look like this:
 ```
         private Uri _currentImage;
 
@@ -339,3 +342,5 @@ We need one more thing for Santa's solution to be complete, we need the ability 
 ![Elf Writing Code](images/elf.png)
 
 An hour later Santa returns.  Cradle, the elf, is just finshing a frantic coding session.  Cradle looks up and smiles! 
+
+**Merry Christmas**
