@@ -32,7 +32,7 @@ We are going to create a UI that looks like this:
 
 Since the focus of this tutorial is using Open AI models in C# we are going to skip over the details of how the XAML works but if you are familiar with any other XAML UI development this should feel familiar and comfortable.
 
-1. Find the MainWindow.XAML file.  You will find a section that goes from `<StackPanel>` to `</StackPanel>'.  Remove this and replace it with the following code:
+1. Find the MainWindow.XAML file.  You will find a section that goes from `<StackPanel>` to `</StackPanel>`.  Remove this and replace it with the following code:
 
 ```
     <Grid>
