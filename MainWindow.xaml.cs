@@ -12,7 +12,7 @@ namespace Dalle3_CSharp_Advent
     public sealed partial class MainWindow : Window
     {
         private const string OPENAI_KEY = "";
-        private const string SAVE_FOLDER = "Advent DALLE";
+        private const string SAVE_FOLER = "Advent DALLE";
         private Uri _currentImage;
         private string _currentPrompt;
 
@@ -25,8 +25,8 @@ namespace Dalle3_CSharp_Advent
         {
             WorkingState();
             var folder = await GetPicturesFolder();
-            var destination = Path.Combine(folder, SAVE_FOLDER, $"{HumanPrompt.Text}.png");
-            var destination2 = Path.Combine(folder, SAVE_FOLDER, $"{HumanPrompt.Text}.txt");
+            var destination = Path.Combine(folder, SAVE_FOLER, $"{HumanPrompt.Text}.png");
+            var destination2 = Path.Combine(folder, SAVE_FOLER, $"{HumanPrompt.Text}.txt");
 
             using (var client = new WebClient())
             {
@@ -48,44 +48,20 @@ namespace Dalle3_CSharp_Advent
             GeneratedImage.Source = null;
             WorkingState();
 
-            try
-            {
-                _currentPrompt = await GeneratePrompt(HumanPrompt.Text);
+            _currentPrompt = await GeneratePrompt(HumanPrompt.Text);
 
-                ShowPrompt(_currentPrompt);
-                var image = await GenerateImage(_currentPrompt);
-                HidePrompt();
+            ShowPrompt(_currentPrompt);
+            var image = await GenerateImage(_currentPrompt);
+            HidePrompt();
 
-                GeneratedImage.Source = image;
-                Save.IsEnabled = true;
-            }
-            catch (InvalidOperationException ex) when (ex.Message.Contains("OpenAI API key"))
-            {
-                // Show user-friendly error message
-                SaveNotification.Title = "Configuration Error";
-                SaveNotification.Subtitle = "Please configure your OpenAI API key in the code before using this feature.";
-                SaveNotification.IsOpen = true;
-                HidePrompt();
-            }
-            catch (Exception ex)
-            {
-                // Handle other potential errors gracefully
-                SaveNotification.Title = "Error";
-                SaveNotification.Subtitle = $"An error occurred: {ex.Message}";
-                SaveNotification.IsOpen = true;
-                HidePrompt();
-            }
+            GeneratedImage.Source = image;
 
             FinishedState();
+            Save.IsEnabled = true;
         }
 
         private static async Task<string> GeneratePrompt(string userPrompt)
         {
-            if (string.IsNullOrWhiteSpace(OPENAI_KEY))
-            {
-                throw new InvalidOperationException("OpenAI API key is not configured. Please add your API key to the OPENAI_KEY constant.");
-            }
-
             OpenAIClient client = new(OPENAI_KEY);
 
             var responseCompletion = await client.GetChatCompletionsAsync(
@@ -106,11 +82,6 @@ namespace Dalle3_CSharp_Advent
 
         private async Task<BitmapImage> GenerateImage(String prompt)
         {
-            if (string.IsNullOrWhiteSpace(OPENAI_KEY))
-            {
-                throw new InvalidOperationException("OpenAI API key is not configured. Please add your API key to the OPENAI_KEY constant.");
-            }
-
             OpenAIClient client = new(OPENAI_KEY);
 
             var responseImages = await client.GetImageGenerationsAsync(
@@ -153,7 +124,7 @@ namespace Dalle3_CSharp_Advent
         private static async Task<string> GetPicturesFolder()
         {
             var myPictures = await StorageLibrary.GetLibraryAsync(KnownLibraryId.Pictures);
-            Directory.CreateDirectory(Path.Combine(myPictures.SaveFolder.Path, SAVE_FOLDER));
+            Directory.CreateDirectory(Path.Combine(myPictures.SaveFolder.Path, SAVE_FOLER));
             return myPictures.SaveFolder.Path;
         }
     }
