@@ -40,13 +40,6 @@
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".github\Copilot-instructions.md" />
-    <None Include=".github\workflows\copilot-setup-steps.yml" />
-  </ItemGroup>
 
   <!-- 
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution 
